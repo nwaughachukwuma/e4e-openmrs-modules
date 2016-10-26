@@ -1,0 +1,158 @@
+referenceapplication.registrationapp.regPatient
+{
+    "id": "referenceapplication.registrationapp.regPatient",
+    "instanceOf": "registrationapp.registerPatient",
+    "label": "Register Patient",
+    "description": "Create a new Patient Record",
+    "extensions": [{
+        "id": "referenceapplication.registrationapp.regPatient.homepageLink",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "referenceapplication.app.registerPatient.label",
+        "url": "registrationapp/registerPatient.page?appId=referenceapplication.registrationapp.regPatient",
+        "icon": "icon-user",
+        "order": 1,
+        "requiredPrivilege": "App: registrationapp.registerPatient"
+    }],
+    "config": {
+        "afterCreatedUrl": "/coreapps/clinicianfacing/patient.page?patientId={{patientId}}",
+        "sections": [{
+                "id": "contactInfo",
+                "label": "registrationapp.patient.contactInfo.label",
+                "questions": [{
+                        "legend": "Person.address",
+                        "header": "registrationapp.patient.address.question",
+                        "fields": [{
+                            "type": "personAddress",
+                            "label": "registrationapp.patient.address.label",
+                            "widget": {
+                                "providerName": "registrationapp",
+                                "fragmentId": "field/personAddress"
+                            }
+                        }]
+                    },
+                    {
+                        "legend": "registrationapp.patient.phone.label",
+                        "id": "phoneNumberLabel",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "registrationapp.patient.phone.question",
+                            "formFieldName": "phoneNumber",
+                            "uuid": "14d4f066-15f5-102d-96e4-000c29c2a5d7",
+                            "widget": {
+                                "providerName": "uicommons",
+                                "fragmentId": "field/text"
+                            },
+                            "cssClasses": ["phone"]
+                        }]
+                    },
+                    {
+                        "legend": "Next of Kin",
+                        "id": "next_of_kin",
+                        "fields": [{
+                                "type": "personAttribute",
+                                "label": "Name",
+                                "formFieldName": "Next_of_Kin_Name",
+                                "uuid": "9efc54df-6d79-4e9c-beb9-7615f5a05b99",
+                                "widget": {
+                                    "providerName": "uicommons",
+                                    "fragmentId": "field/text"
+                                }
+                            },
+                            {
+                                "type": "personAttribute",
+                                "label": "Phone Number",
+                                "formFieldName": "Next_of_kin_Phone",
+                                "uuid": "d0fc4ecf-0181-4129-ac94-a3ed2ac0f3ee",
+                                "widget": {
+                                    "providerName": "uicommons",
+                                    "fragmentId": "field/text"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "visitInfo",
+                "label": "Visit Info",
+                "questions": [{
+                        "legend": "Referral Source",
+                        "id": "referralsource",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "Referral Source",
+                            "formFieldName": "Referral Source",
+                            "uuid": "a045245b-1b5f-46a2-a091-0b0b2cf8fc90",
+                            "widget": {
+                                "providerName": "lfhcforms",
+                                "fragmentId": "field/referralsource"
+                            }
+                        }]
+                    },
+                    {
+                        "legend": "Date of First Encounter",
+                        "id": "first_encouter_date",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "Date of First Encounter",
+                            "formFieldName": "First Encounter",
+                            "uuid": "ff7f09bb-2be4-4d44-b4d7-66071902e228",
+                            "widget": {
+                                "providerName": "lfhcforms",
+                                "fragmentId": "field/encounterdate"
+                            }
+                        }]
+                    }
+                ]
+            },
+            {
+                "id": "otherInfo",
+                "label": "Other Info",
+                "questions": [{
+                        "legend": "Ethnicity",
+                        "id": "ethnicity",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "Of what ethnic group is the person?",
+                            "formFieldName": "Ethnicity",
+                            "uuid": "2364062a-fae0-45ed-a68b-2c4663845d93",
+                            "widget": {
+                                "providerName": "uicommons",
+                                "fragmentId": "field/text"
+                            }
+                        }]
+                    },
+                    {
+                        "legend": "Occupation",
+                        "id": "personoccupation",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "Occupation",
+                            "formFieldName": "occupation",
+                            "uuid": "fb4935ac-e1a9-4a95-b898-bc19971c2cdf",
+                            "widget": {
+                                "providerName": "uicommons",
+                                "fragmentId": "field/text"
+                            }
+                        }]
+                    },
+                    {
+                        "legend": "Avg. Monthly Income",
+                        "id": "avgmonthlyincome",
+                        "fields": [{
+                            "type": "personAttribute",
+                            "label": "Average Monthly Income",
+                            "formFieldName": "Income",
+                            "uuid": "677cf9d2-0353-4856-87b5-6b5c28ef9ed6",
+                            "widget": {
+                                "providerName": "uicommons",
+                                "fragmentId": "field/text"
+                            }
+                        }]
+                    }
+                ]
+            }
+        ]
+    }
+}

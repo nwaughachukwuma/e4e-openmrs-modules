@@ -1,0 +1,7 @@
+Dependencies:
+--------
+1. reportingui 1.1 SNAPSHOT
+
+This module was forked on git hub, cloned and built using maven on eclipse. I have customized the concept for all the forms, and created new fields that enables me to create fields in patient registration form. The new fields are .gsp files and they can be found in the .omod\src\main\webapp\fragments\field section of the lfhc directory.
+
+I propose to create a custom module that clones most of the characteristics of the lfhc module. That way we can decide what to enable.

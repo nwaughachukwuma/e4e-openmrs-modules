@@ -1,0 +1,7 @@
+To configure the registration form, You'd have to do the following:
+1. Go to Admin -> Manage Apps, and stop the in-built form app.
+2. Click the button at the top left to add new custom app.
+3. Name the app, and include the JSON for your version of registration app. See "patient registration app.txt" in the parent folder for a sample.
+4. Save the JSON app, and there you have your form.
+
+I have used a module called lfhc forms module to enable the creation of advanced features in the form. Look at the file; using the "lfhc module.txt" 
