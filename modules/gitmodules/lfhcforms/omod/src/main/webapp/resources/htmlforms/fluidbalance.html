@@ -1,0 +1,190 @@
+<htmlform formUuid="1c6c9d87-748b-43c4-b764-3df7e711762f" formName="Fluid Balance" formEncounterType="9f5c90b2-03e0-4374-8534-6c32ea71f3ab" formVersion="0.6"
+	formAddMetadata="yes"
+	formUILocation="patientDashboard.visitActions"
+	formOrder="15"
+	formIcon="icon-medkit"
+	formShowIf=""
+	formDisplayStyle="Simple"
+	>
+
+
+<ifMode mode="VIEW">
+	<script type="text/javascript" >
+		// JavaScript for VIEW mode
+		jQuery(document).ready(function(){
+			handleViewMode("1c6c9d87-748b-43c4-b764-3df7e711762f");
+		});
+	</script>
+</ifMode>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	jQuery(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+<section id="fluid-input" sectionTag="section" headerStyle="title" headerCode="Fluid Input">
+	<fieldset>
+		<legend>
+			Intravenous
+		</legend>
+		<h3>
+			Intravenous
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1004" showUnits="true"/>
+		</p>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Oral
+		</legend>
+		<h3>
+			Oral
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1005" showUnits="true"/>
+		</p>
+	</fieldset>
+		<fieldset>
+		<legend>
+			Nasogastric
+		</legend>
+		<h3>
+			Nasogastric
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1171" showUnits="true"/>
+		</p>
+	</fieldset>
+		<fieldset>
+		<legend>
+			Intraosseous
+		</legend>
+		<h3>
+			Intraosseous
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1172" showUnits="true"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Other
+		</legend>
+		<h3>
+			Other
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1006" showUnits="true"/>
+		</p>
+	</fieldset>
+
+</section>
+
+<section id="fluid-output" sectionTag="section" headerStyle="title" headerCode="Fluid Output">
+
+	<fieldset>
+		<legend>
+			Urine
+		</legend>
+		<h3>
+			Urine
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1168" showUnits="true"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Stool
+		</legend>
+		<h3>
+			Stool
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1169" showUnits="true"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Wound drainage
+		</legend>
+		<h3>
+			Wound drainage
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1001" showUnits="true"/>
+		</p>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Pleural fluid drainage
+		</legend>
+		<h3>
+			Pleural fluid drainage
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1002" showUnits="true"/>
+		</p>
+	</fieldset>
+		<fieldset>
+		<legend>
+			Other
+		</legend>
+		<h3>
+			Other fluid output
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1170" showUnits="true"/>
+		</p>
+	</fieldset>
+
+</section>
+
+<submit/>
+</htmlform>

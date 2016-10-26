@@ -1,0 +1,454 @@
+<htmlform formUuid="3faa978f-8c89-4f8e-b29f-17fd11099ecf" formName="Treatment Plan/Order" formEncounterType="feacdb57-4388-4b39-8840-2ff063bfab34" formVersion="0.7"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="7"
+formIcon="icon-stethoscope"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+<ifMode mode="VIEW" include="false">
+	<uiInclude provider="lfhcforms" javascript="toggleContainers.js"/>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			toggleContainers();
+		});
+	</script>
+</ifMode>
+
+<ifMode mode="VIEW">
+	<script type="text/javascript" >
+		// JavaScript for VIEW mode
+		$(document).ready(function(){
+			handleViewMode("3faa978f-8c89-4f8e-b29f-17fd11099ecf");
+		});
+	</script>
+</ifMode>
+<ifMode mode="enter">
+
+</ifMode>
+
+<ifMode mode="view" include="false">
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+
+			$(".bolus").each(function (index, currentBolus) {
+				$(currentBolus).trigger("change");
+			})
+			$(".bolus-amount").hide();
+			$(".bolus-default").show();
+			$(".bolus").change(function () {
+				// retrieve the numeric prefix in order to toggle the correct section
+				var prefix = parseFloat($(this).attr("id"));
+				if ($(this).is(':checked')) {
+					//var bolusAmount = getValue(prefix+"-bolus-no-amount.value");
+					//setValue(prefix+"-bolus-no-amount.value", "");
+					//setValue(prefix+"-bolus-yes-amount.value", bolusAmount);
+					$("#"+prefix+"-bolus-yes").show();
+				}
+				else {
+					var noBolusAmount = getValue(prefix+"-bolus-yes-amount.value");
+					//setValue(prefix+"-bolus-yes-amount.value", "");
+					//setValue(prefix+"-bolus-no-amount.value", noBolusAmount);
+					setValue(prefix+"-bolus-yes-amount.value", "");
+					$("#"+prefix+"-bolus-yes").hide();
+				}
+			});
+		})
+	</script>
+
+
+</ifMode>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	$(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode
+>
+
+<ifMode mode="VIEW" include="false">
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			/* hide the 'seconds' time field */
+			$(".hfe-seconds").hide();
+		});
+	</script>
+</ifMode>
+
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+<section id="treatment" sectionTag="section" headerStyle="title" headerCode="Treatment">
+
+	<fieldset>
+		<legend>
+			Unit
+		</legend>
+		<h3>Unit</h3>
+		<p>
+			<obs conceptId="LFHC:1140"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Vital Sign Frequency
+		</legend>
+		<h3>Vital Sign Frequency</h3>
+		<p>
+			<obs conceptId="LFHC:1144"/>
+		</p>
+	</fieldset>
+
+	<fieldset field-separator=", ">
+		<legend>
+			Lab test order
+		</legend>
+		<h3>Laboratory test order</h3>
+		<p>
+			<obs id="lab-test" conceptId="LFHC:1287" >
+				<controls>
+					<when value="CIEL:1065" thenDisplay="#lab-test-yes"/>
+				</controls>
+			</obs>
+		</p>
+		<ifMode mode="view" include="false">
+			<strong id="lab-test-yes">
+				Please fill in the Lab Test Order form to order your tests
+			</strong>
+		</ifMode>
+	</fieldset>
+	<fieldset field-separator=", ">
+
+		<legend>X-ray order</legend>
+		<h3>X-ray order</h3>
+		<p>
+			<obs id="xray" conceptId="LFHC:1286" >
+				<controls>
+					<when value="CIEL:1065" thenDisplay="#xray-yes"/>
+				</controls>
+			</obs>
+		</p>
+		<ifMode mode="view" include="false">
+			<strong id="xray-yes">
+				Please fill in the X-ray Order form to order your x-rays
+			</strong>
+		</ifMode>
+	</fieldset>
+
+	<fieldset field-separator=", ">
+
+		<legend>Ultrasound order</legend>
+		<h3>Ultrasound order</h3>
+		<p>
+			<obs id="ultrasound" conceptId="LFHC:1285" >
+				<controls>
+					<when value="CIEL:1065" thenDisplay="#ultrasound-yes"/>
+				</controls>
+			</obs>
+		</p>
+		<ifMode mode="view" include="false">
+			<strong id="ultrasound-yes" >
+				Please fill in the Ultrasound Order form to order your ultrasounds
+			</strong>
+		</ifMode>
+	</fieldset>
+
+	<fieldset field-separator=", ">
+
+		<legend>Procedure</legend>
+		<h3>Procedure</h3>
+		<p>
+			<obs conceptId="160716" rows="4" cols="40"/>
+		</p>
+
+	</fieldset>
+
+	<fieldset field-separator=", ">
+
+		<legend>Medication order</legend>
+		<h3>Medication order</h3>
+		<ifMode mode="VIEW" include="false">
+			<p>
+				<strong>
+					For IPD, medication to be ordered on the paper form
+				</strong>
+			</p>
+
+			<p>
+				<strong>
+					For OPD, medication to be ordered on the electronic form: Medication Order
+				</strong>
+			</p>
+		</ifMode>
+		<p>
+			<obs conceptId="LFHC:1176" rows="4" cols="50"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>IV fluids order</legend>
+		<h3>Intravenous fluids order</h3>
+		<repeat>
+			<template>
+				<div id="{n}-toggleContainer" templateBlockId="ivs" class="toggleContainer" style="display:none;" >
+					<div class="order">
+						<obsgroup groupingConceptId="LFHC:1055">
+							<p>
+								<obs id="{n}" conceptId="LFHC:1054" answerConceptIds="LFHC:1205,CIEL:80804,LFHC:1206,CIEL:78617,LFHC:1207,CIEL:161922"/>
+							</p>
+							<ifMode mode="view" include="false">
+								<p style="padding-top: 15px">
+									<input type="checkbox" class="bolus" id="{n}-bolus" name="bolus" value="true"/>
+									Bolus
+								</p>
+							</ifMode>
+							<p class="bolus-amount" id="{n}-bolus-yes">
+								<span class="questionLabel">Amount of IV fluid: </span>
+								<obs id="{n}-bolus-yes-amount" conceptId="LFHC:1273" showUnits="true"/>
+							</p>
+							<p class="bolus-default bolus-amount" id="{n}-bolus-no">
+								<span class="questionLabel">Rate of IV fluid: </span>
+								<obs id="{n}-bolus-no-amount" conceptId="CIEL:162745" showUnits="true"/>
+							</p>
+						</obsgroup>
+					</div>
+					<span class="addRemoveButtons">
+						<i class="addEntry icon-">&#xf055; Add</i>
+						<i class="removeEntry icon-">   &#xf056; Remove</i>
+					</span>
+				</div>
+			</template>
+			<render n="501"/>
+			<render n="502"/>
+			<render n="503"/>
+			<render n="504"/>
+			<render n="505"/>
+			<render n="506"/>
+			<render n="507"/>
+			<render n="508"/>
+			<render n="509"/>
+		</repeat>
+	</fieldset>
+
+
+	<fieldset field-separator=", ">
+		<legend>Blood Transfusion</legend>
+		<h3>Blood transfusion</h3>
+		<p>
+			<obs id="btrans" conceptId="LFHC:1275" >
+				<controls>
+					<when value="CIEL:1065" thenDisplay="#btrans-yes"></when>
+				</controls>
+			</obs>
+		</p>
+		<div id="btrans-yes" class="order">
+
+			<h3>Volume of blood to be administered</h3>
+			<p>
+				<obs conceptId="LFHC:1211" showUnits="true" />
+			</p>
+			<h3>Type of transfusion fluid</h3>
+			<p>
+				<obs conceptId="CIEL:161927" />
+			</p>
+			<h3>Duration of transfusion</h3>
+			<p>
+				<obs conceptId="LFHC:1212" showUnits="true" />
+			</p>
+		</div>
+	</fieldset>
+
+	<ifMode mode="view">
+		<fieldset>
+			<h3>Volume of blood to be administered</h3>
+			<p>
+				<obs conceptId="LFHC:1211" showUnits="true" />
+			</p>
+		</fieldset>
+		<fieldset>
+			<h3>Type of transfusion fluid</h3>
+			<p>
+				<obs conceptId="CIEL:161927" />
+			</p>
+		</fieldset>
+		<fieldset>
+			<h3>Duration of transfusion</h3>
+			<p>
+				<obs conceptId="LFHC:1212" showUnits="true" />
+			</p>
+		</fieldset>
+	</ifMode>
+
+	<fieldset field-separator=", ">
+
+		<legend>Diet</legend>
+		<h3>Diet</h3>
+		<ifMode mode="VIEW" include="false">
+			What diet should the patient be eating?
+		</ifMode>
+		<p>
+			<obs id="diet" conceptId="LFHC:1047" answerConceptIds="CIEL:159596, LFHC:1046, CIEL:985, CIEL:161648, CIEL:162758, CIEL:162709, CIEL:159597, CIEL:122884" >
+				<controls>
+					<when value="CIEL:985" thenDisplay="#feeding-plan">
+					</when>
+				</controls>
+			</obs>
+		</p>
+		<br/>
+		<span class="thenDisplay" id="feeding-plan">
+			<obsgroup groupingConceptId="CIEL:162046">
+				<h3>Feeding plan</h3>
+				<p>
+					<obs conceptId="CIEL:985" />
+				</p>
+				<h3>Comments</h3>
+				<p>
+					<obs conceptId="CIEL:160632" rows="4" columns="60"/>
+				</p>
+			</obsgroup>
+		</span>
+
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Activity
+		</legend>
+		<h3>Activity</h3>
+		<p>
+			<obs conceptId="LFHC:1148"/>
+		</p>
+	</fieldset>
+
+	<fieldset>
+		<legend>
+			Weigh daily
+		</legend>
+		<h3>Weigh daily</h3>
+		<p>
+			<obs conceptId="LFHC:1151"/>
+		</p>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Input/ouput
+		</legend>
+		<h3>Record input/ouput</h3>
+		<p>
+			<obs conceptId="LFHC:1152"/>
+		</p>
+	</fieldset>
+	<fieldset>
+		<legend>
+			Monitors
+		</legend>
+		<h3>Monitors required</h3>
+		<p>
+			<obs conceptId="LFHC:1153"/>
+		</p>
+	</fieldset>
+
+	<obsgroup groupingConceptId="LFHC:1156">
+		<fieldset>
+			<legend>
+				Oxygen delivery method
+			</legend>
+			<h3>Oxygen delivery method</h3>
+			<p>
+				<obs conceptId="LFHC:1157"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>
+				Oxygen delivery rate
+			</legend>
+			<h3>Oxygen delivery rate</h3>
+			<p>
+				<obs conceptId="LFHC:1158" showUnits="true"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>
+				Oxygen saturation goal
+			</legend>
+			<h3>Oxygen saturation goal</h3>
+			<p>
+				<obs conceptId="LFHC:1159"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>
+				Airway suctioning
+			</legend>
+			<h3>Airway suctioning</h3>
+			<p>
+				<obs conceptId="LFHC:1160"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>
+				Dressing Changes
+			</legend>
+			<h3>Dressing Changes</h3>
+			<p>
+				<obs conceptId="LFHC:1043"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>
+				Notify for following
+			</legend>
+			<h3>Notify for following</h3>
+			<p>
+				<obs conceptId="LFHC:1165" rows="4" cols="50"/>
+			</p>
+		</fieldset>
+	</obsgroup>
+</section>
+
+<submit/>
+
+</htmlform>

@@ -1,0 +1,205 @@
+<htmlform formUuid="f1ebd934-e291-430d-956c-cd7eea7af5c1" formName="Medication Order" formEncounterType="3c462397-7840-4890-ae78-d123d9fd138b" formVersion="0.6"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="10"
+formIcon="icon-stethoscope"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+<ifMode mode="VIEW" include="false">
+
+	<script type="text/javascript">
+
+		<!-- 07/08/2015 Romain: Dose Calculation Helper is set aside for now to simplify the UI
+		function calculateDose (weight, doseCalculation){
+			var dose = (weight * doseCalculation);
+			return dose;
+		}
+
+		function updateDose (weight, doseCalculation, sectionNo) {
+			if (!(weight == null) ) {
+				jQuery("#weight-value").show();
+				jQuery("#weight-null").hide();
+
+				var dose = calculateDose(weight, doseCalculation);
+				setValue("dose.value", dose);
+				setValue("dose-unit.value", 161553)
+			}
+			else {
+				jQuery("#weight-value").hide();
+				jQuery("#weigh-null").show();
+			}
+		}
+	-->
+
+
+	jQuery(function () {
+		jQuery("#weight-value").hide();
+		jQuery("#weight-null").hide();
+
+		var weight = jQuery(htmlform).find("#weight").text();
+		if (!(weight === "")) {
+			jQuery("#weight-value").show();
+			jQuery("#weight-null").hide();
+		}else {
+			jQuery("#weight-value").hide();
+			jQuery("#weight-null").show();
+		}
+
+		jQuery( ".dose-calculation" ).change(function() {
+			var doseCalculation = document.getElementById("dose-calculation").value;
+			var weight = jQuery(htmlform).find("#weight").text();
+			updateDose(weight, doseCalculation);
+		});
+	});
+
+</script>
+</ifMode>
+
+<ifMode mode="VIEW">
+	<script type="text/javascript">
+		// JavaScript for VIEW mode
+		jQuery(document).ready(function(){
+			handleViewMode("f1ebd934-e291-430d-956c-cd7eea7af5c1");
+		});
+	</script>
+</ifMode>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	jQuery(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+
+<section id="drug-order" sectionTag="section" headerStyle="title" headerCode="Medication Order">
+
+	<obsgroup groupingConceptId="CIEL:1442">
+
+		<fieldset >
+			<legend>Drug</legend>
+			<h3>Drug to order</h3>
+			<p>
+				<obs id="drug-ordered" conceptId="CIEL:1282" answerClasses="Drug" style="autocomplete" size="10"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>Route</legend>
+			<h3>Route</h3>
+			<p>
+				<obs id="route" conceptId="LFHC:1029"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>Dose</legend>
+			<h3>Dose</h3>
+
+<!-- 07/08/2015 Romain: Dose Calculation Helper is set aside to simplify the UI
+				<table>
+					<tr>
+						<td>
+							<p><em>Dose calculation helper</em>
+								<br/>
+								<small>Enter an amount in mg/kg to help you calculate the Dose
+
+									<input id="dose-calculation" class="dose-calculation" name="dose-calculation" size="6" />mg/kg
+
+								</small>
+							</p>
+						</td>
+					</tr>
+				</table>
+			-->
+			<ifMode mode="VIEW" include="false">
+				<span id="weight-value">
+					<p><strong>Patient weight is <span id="weight"><lookup expression="fn.latestObs('CIEL:5089').valueNumeric" /></span>kg</strong>
+					</p>
+				</span>
+				<span id="weight-null">
+					<font color="red"><i class="icon-">&#xf071;</i>Weight has not been recorded yet</font>
+				</span>
+			</ifMode>
+			<p>
+				<ifMode mode="VIEW" include="false">
+					<span>Dose: </span>
+				</ifMode>
+				<obs id="dose" conceptId="CIEL:160856" />
+			</p>
+			<p>
+				<ifMode mode="VIEW" include="false">
+					<span>Unit: </span>
+				</ifMode>
+				<obs id="dose-unit" conceptId="CIEL:161563" answerConceptIds="CIEL:161553, CIEL:161554, CIEL:162263, CIEL:162366" answerLabels="mg, g, ml, mcg" />
+			</p>
+
+		</fieldset>
+		<fieldset>
+			<legend>Frequency</legend>
+			<h3>Frequency</h3>
+			<p>
+				<obs id="frequency"	conceptId="CIEL:160855"/>
+			</p>
+			<p>
+				<obs id="prn" conceptId="CIEL:160855" answerConceptId="CIEL:160857"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>Duration</legend>
+			<h3>Duration</h3>
+			<p>
+				<obs id="duration" conceptId="CIEL:159368" showUnits="days"/>
+			</p>
+		</fieldset>
+		<fieldset>
+			<legend>Indication</legend>
+			<h3>Indication</h3>
+			<p>
+				<obs id="indication" conceptId="CIEL:160742" answerClasses="Diagnosis" style="autocomplete"/>
+			</p>
+		</fieldset>
+	</obsgroup>
+</section>
+<submit/>
+</htmlform>

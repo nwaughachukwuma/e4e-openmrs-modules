@@ -1,0 +1,866 @@
+<htmlform formUuid="074c6c42-7f24-46dc-87d4-e71951207d22" formName="Lab Test Order" formEncounterType="39deb891-8dc6-451b-9361-dbf564f27250" formVersion="0.6.1"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="8"
+formIcon="icon-stethoscope"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+<style type="text/css">
+
+	.tg {
+		table-layout: fixed;
+		width: 50%;
+		margin-left: 10px;
+	}
+
+	.tg td {
+		width: 35%;
+	}
+
+	.customSubmit {
+		background-color: green;
+	}
+
+</style>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	jQuery(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode>
+
+<ifMode mode="ENTER">
+	<uiInclude provider="lfhcforms" javascript="toggleContainers.js"/>
+
+	<script type="text/javascript">
+
+		jQuery(document).ready(function(){
+			$(".checkAll").click(function () {
+
+				checked = $(this).prop("checked");
+				console.log("checked: "+checked);
+
+				if (checked) {
+					console.log("is in checked loop");
+					$(this).closest("fieldset").find(".toCheck").find("input").each(function (index, currentChild)  {
+						$(currentChild).prop("checked", true);
+					});
+				}
+				if (!checked) {
+					console.log("is in unchecked loop");
+					$(this).closest("fieldset").find(".toCheck").find("input").each(function (index, currentChild)  {
+						$(currentChild).prop("checked", false);
+					});}
+				});
+
+			$(".hiddenObs").show();
+
+		});
+	</script>
+
+</ifMode>
+
+<ifMode mode="edit">
+	<script type="text/javascript">
+
+		jQuery(document).ready(function(){
+			$(".toCheck").closest("p").hide();
+			$(".comments").hide();
+
+			$("fieldset").each(function (index, currentFieldset) {
+				var emptyFieldset = true;
+				$(currentFieldset).find(".toCheck").each(function (index, currentObs) {
+					checked =  null;
+					if (getValue($(currentObs).attr('id')+".value")) {
+						emptyFieldset = false;
+						currentValue = getValue($(currentObs).attr('id')+".value");
+						$(currentObs).closest(".hiddenObs").show();
+					}
+				});
+
+				// This is a code to add a comments field if any of the above tests are ordered
+				if (!emptyFieldset) {
+					console.log($(currentFieldset).find(".comments"));
+					$(currentFieldset).find(".comments").show();
+				}
+			});
+
+		});
+
+	</script>
+</ifMode>
+
+<ifMode mode="view">
+	<script type="text/javascript">
+
+		jQuery(document).ready(function(){
+			$("htmlform").each(function (index, currentForm) {
+				if ($(currentForm).attr("formuuid") == "074c6c42-7f24-46dc-87d4-e71951207d22") {
+					$(".hiddenObs").show();
+					$("p").css("display","inline-block");
+				}
+			});
+			handleViewMode("074c6c42-7f24-46dc-87d4-e71951207d22");
+		});
+
+	</script>
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+<section id="lab-test-order" sectionTag="section" headerStyle="title" headerCode="lfhcforms.labtestorder.section.labtestorder">
+	<fieldset id="cbc-fieldset">
+		<!-- Complete Blood Count -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.completebloodcount"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.completebloodcount"/></h3>
+
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}" showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="100" m="LFHC:1406" u="true" />
+			<render n="101" m="LFHC:1405" u="true" />
+			<render n="102" m="LFHC:1407" u="true" />
+			<render n="103" m="CIEL:1018" u="true" />
+			<render n="104" m="CIEL:851" u="true" />
+			<render n="105" m="LFHC:1408" u="true" />
+			<render n="106" m="LFHC:1404" u="true" />
+			<render n="107" m="CIEL:1016" u="true" />
+			<render n="108" m="LFHC:1403" u="true" />
+		</repeat>
+	</fieldset>
+	<fieldset id="ps-fieldset">
+		<!-- Peripheral Smear -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.periphearalsmear"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.periphearalsmear"/></h3>
+
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="201" m="CIEL:1022" u="true"/>
+			<render n="202" m="CIEL:1330" u="true"/>
+			<render n="203" m="LFHC:1411" u="true"/>
+			<render n="204" m="CIEL:952" u="true"/>
+			<render n="205" m="CIEL:1332" u="true"/>
+			<render n="206" m="LFHC:1409" u="true"/>
+			<render n="207" m="LFHC:1190 " u="true"/>
+			<render n="208" m="CIEL:1023" u="true"/>
+			<render n="209" m="CIEL:1333" u="true"/>
+			<render n="210" m="LFHC:1410" u="true"/>
+			<render n="211" m="CIEL:1327" u="true"/>
+			<render n="212" m="LFHC:1127" u="true"/>
+			<render n="213" m="LFHC:1428" u="true"/>
+			<render n="214" m="LFHC:1429" u="true"/>
+
+			<!--Commenting because the concept is N/A type. Waiting for client to correct
+			<render n="212" m="CIEL:161424" u="true"/>-->
+		</repeat>
+
+		<!-- This is a code to add a comments field if any of the above tests are ordered -->
+		<ifMode mode="enter" include="false">
+			<span class="comments">
+				<h3><lookup expression="fn.getConcept('LFHC:1430').name"/></h3>
+				<p>
+					<obs conceptId="LFHC:1430" cols="40" rows="5" />
+				</p>
+			</span>
+		</ifMode>
+
+	</fieldset>
+
+	<fieldset id="oh-fieldset">
+		<!-- Other Hematology -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.otherhematology"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.otherhematology"/></h3>
+
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="301" m="CIEL:32" u="false" />
+			<render n="302" m="CIEL:300" u="false" />
+			<render n="303" m="CIEL:161421" u="false" />
+		</repeat>
+	</fieldset>
+	<fieldset id="ru-fieldset">
+		<!-- Routine Urinalysis -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.routineurinalysis"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.routineurinalysis"/></h3>
+
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}" showUnits="{u}" cols="{c}" rows="{r}" />
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="400" m="CIEL:162106" u="false" />
+			<render n="401" m="CIEL:162101" u="false" />
+			<render n="402" m="LFHC:1442" u="false" />
+			<render n="403" m="LFHC:1441" u="false" />
+			<render n="404" m="CIEL:161442" u="false" />
+			<render n="405" m="LFHC:1440" u="false" />
+			<render n="406" m="CIEL:1875" u="false" />
+			<render n="408" m="CIEL:161440" u="false" />
+			<render n="409" m="CIEL:161438" u="false" />
+			<render n="410" m="CIEL:161439" u="false" />
+			<render n="411" m="CIEL:161441" u="false" />
+			<render n="413" m="LFHC:1439" u="false" />
+			<render n="414" m="LFHC:1443" u="false" />
+			<render n="414" m="LFHC:1454" u="false" c="40" r="5" />
+		</repeat>
+	</fieldset>
+	
+	<fieldset id="ch-fieldset">
+		<!-- Chemistry -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.chemistry"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.chemistry"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}" />
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="500" m="LFHC:1412" u="true" />
+			<render n="501" m="LFHC:1413" u="true" />
+			<render n="502" m="CIEL:1132" u="true" />
+			<render n="503" m="CIEL:1133" u="true" />
+			<render n="504" m="CIEL:1134" u="true" />
+			<render n="506" m="CIEL:857" u="true" />
+			<render n="507" m="CIEL:790" u="true" />
+			<render n="508" m="CIEL:1012" u="true" />
+			<render n="509" m="LFHC:1431" u="true" />
+
+		</repeat>
+	</fieldset>
+	<fieldset id="bg-fieldset">
+		<!-- Blood Gas -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.bloodgas"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.bloodgas"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}" />
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="600" m="LFHC:1180" />
+			<render n="601" m="LFHC:1185" u="true" />
+			<render n="602" m="LFHC:1186" u="true" />
+			<render n="603" m="LFHC:1427" u="true" />			
+		</repeat>
+	</fieldset>
+	<fieldset id="co-fieldset">
+		<!-- Coagulation -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.coagulation"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.coagulation"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<!--  The following section is not using 'repeat' and 'template' tags because the label of one concept has to be handled differently -->
+		<div class="hiddenObs" style="display:none;">
+
+			<p>
+				<obs id="700" class="toCheck" conceptId="LFHC:1276" answerConceptId="CIEL:161482"/>
+			</p>
+			<ifMode mode="enter" include="false">
+				<p>
+					<ifMode mode="edit">
+						<span class="questionLabel"><lookup expression="fn.getConcept('CIEL:161482').name"/></span>
+					</ifMode>
+					<ifMode mode="view">
+						:
+					</ifMode>
+					<obs conceptId="CIEL:161482"  showUnits="false"/>
+				</p>
+			</ifMode>
+		</div>
+		<div class="hiddenObs" style="display:none;">
+			<p>
+				<obs id="701" class="toCheck" conceptId="LFHC:1276" answerConceptId="CIEL:161153" answerLabel="aPTT"/>
+			</p>
+			<ifMode mode="enter" include="false">
+				<p>
+					<ifMode mode="edit">
+						<span class="questionLabel">aPTT</span>
+					</ifMode>
+					<ifMode mode="view">
+						:
+					</ifMode>
+					<obs conceptId="CIEL:161153" answerConceptId="CIEL:161153" answerLabel="aPTT" showUnits="true"/>
+				</p>
+			</ifMode>
+		</div>
+		<div class="hiddenObs" style="display:none;">
+			<p>
+				<obs id="702" class="toCheck" conceptId="LFHC:1276" answerConceptId="CIEL:161433"/>
+			</p>
+			<ifMode mode="enter" include="false">
+				<p>
+					<ifMode mode="edit">
+						<span class="questionLabel"><lookup expression="fn.getConcept('CIEL:161433').name"/></span>
+					</ifMode>
+					<ifMode mode="view">
+						:
+					</ifMode>
+					<obs conceptId="CIEL:161433"  showUnits="true"/>
+				</p>
+			</ifMode>
+		</div>
+	</fieldset>
+	<fieldset id="bs-fieldset">
+		<!-- Bone Set -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.boneset"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.boneset"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="800" m="LFHC:1426" u="true"/>
+			<render n="801" m="LFHC:1416" u="true"/>
+			<render n="802" m="LFHC:1417" u="true"/>
+			<render n="803" m="LFHC:1194" u="true"/>
+		</repeat>
+	</fieldset>
+	<fieldset id="lf-fieldset">
+		<!-- Liver Function -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.liverfunction"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.liverfunction"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="900" m="CIEL:655" u="true" />
+			<render n="901" m="CIEL:1297" u="true" />
+			<render n="902" m="LFHC:1196" u="true" />
+			<render n="903" m="CIEL:654" u="true" />
+			<render n="904" m="CIEL:653" u="true" />
+			<render n="905" m="CIEL:1014" u="true" />
+			<render n="906" m="CIEL:785" u="true" />
+			<render n="907" m="LFHC:1415" u="true" />
+			<render n="908" m="LFHC:1414" u="true" />
+			<render n="909" m="CIEL:1013" u="true" />
+			<render n="910" m="CIEL:1299" u="true" />
+		</repeat>
+	</fieldset>
+	<fieldset id="ot-fieldset">
+		<!-- Other -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.other"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.other"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="1000" m="CIEL:159362" u="false" />
+			<render n="1001" m="LFHC:1419" u="true" />
+			<render n="1002" m="LFHC:1420" u="true" />
+			<render n="1003" m="CIEL:160226" u="false" />
+			<render n="1004" m="LFHC:1421" u="true" />
+			<render n="1005" m="CIEL:161500" u="true" />
+			<render n="1006" m="CIEL:855" u="true" />
+			<render n="1007" m="CIEL:159644" u="true" />
+			<render n="1008" m="CIEL:5497" u="true" />
+			<render n="1009" m="CIEL:856" u="false" />
+			<render n="1010" m="CIEL:730" u="true" />
+			<render n="1011" m="LFHC:1422" u="true" />
+			<render n="1012" m="CIEL:161503" u="true" />
+			<render n="1013" m="LFHC:1423" u="true" />
+			<render n="1014" m="CIEL:304" u="false" />
+			<render n="1015" m="CIEL:161449" u="false" />
+		</repeat>
+	</fieldset>
+	<fieldset id="rt-fieldset">
+		<!-- Rapid Test -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.rapidtest"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.rapidtest"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="1100" m="LFHC:1119" u="false" />
+			<render n="1101" m="CIEL:1643" u="false" />
+			<render n="1102" m="CIEL:1325" u="false" />
+			<render n="1103" m="CIEL:45" u="false" />
+			<render n="1104" m="LFHC:1120" u="false" />
+			<render n="1105" m="LFHC:1121" u="false" />
+			<render n="1106" m="LFHC:1122" u="false" />
+			<render n="1107" m="LFHC:1433" u="false" />
+			<render n="1108" m="LFHC:1434" u="false" />
+			<render n="1111" m="LFHC:1438" u="false" />
+			<render n="1109" m="CIEL:1040" u="false" />
+			<render n="1110" m="CIEL:299" u="false" />
+			<render n="1112" m="LFHC:1204" u="false" />
+			<render n="1113" m="CIEL:159430" u="false" />
+		</repeat>
+	</fieldset>
+	<fieldset id="tb-fieldset">
+		<!-- TB tests -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.tbtest"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.tbtest"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="1200" m="CIEL:307" u="false" />
+			<render n="1201" m="LFHC:1126" u="false" />
+		</repeat>
+	</fieldset>
+	<fieldset id="th-fieldset">
+		<!-- Torch -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.torch"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.torch"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="1300" m="CIEL:161523" u="false" />
+			<render n="1301" m="CIEL:161525" u="false" />
+			<render n="1302" m="CIEL:161527" u="false" />
+			<render n="1303" m="CIEL:161528" u="false" />
+		</repeat>
+	</fieldset>
+	<fieldset id="lp-fieldset">
+		<!-- Lipid Profile -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.lipidprofile"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.lipidprofile"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+			<render n="1400" m="CIEL:1006" u="true" />
+			<render n="1401" m="CIEL:1009" u="true" />
+			<render n="1402" m="CIEL:1007" u="true" />
+			<render n="1403" m="CIEL:1008" u="true" />
+		</repeat>
+	</fieldset>
+	<fieldset id="cu-fieldset">
+		<!-- Culture -->
+		<legend><uimessage code="lfhcforms.labtestorder.legend.culture"/></legend>
+		<h3><uimessage code="lfhcforms.labtestorder.legend.culture"/></h3>
+		<ifMode mode="enter">
+			<div>
+				<span>
+					<small>
+						<a><label><uimessage code="lfhcforms.labtestorder.checkuncheckall"/><input id="checkAll" class="checkAll" type="checkbox" /></label></a>
+					</small>
+				</span>
+				<hr/>
+			</div>
+		</ifMode>
+		<repeat>
+			<template>
+				<div class="hiddenObs" style="display:none;">
+
+					<p>
+						<obs id="{n}" class="toCheck" conceptId="LFHC:1276" answerConceptId="{m}"/>
+					</p>
+					<ifMode mode="enter" include="false">
+						<p>
+							<ifMode mode="edit">
+								<span class="questionLabel"><lookup expression="fn.getConcept('{m}').name"/></span>
+							</ifMode>
+							<ifMode mode="view">
+								:
+							</ifMode>
+							<obs conceptId="{m}"  showUnits="{u}"/>
+						</p>
+					</ifMode>
+				</div>
+			</template>
+				<!--Commenting because the concept is N/A type. Waiting for client to correct
+				<render n="1500" m="CIEL:161156" u="false" />
+				<render n="1501" m="CIEL:161155" u="false" />
+			-->
+			<render n="1502" m="CIEL:159648" u="false" />
+			<render n="1503" m="LFHC:1200" u="false" />
+			<render n="1504" m="LFHC:1201" u="false" />
+			<render n="1505" m="LFHC:1202" u="false" />
+			<render n="1506" m="CIEL:161484" u="false" />
+			<render n="1507" m="CIEL:161485" u="false" />
+			<render n="1508" m="CIEL:161454" u="false" />
+			<render n="1509" m="LFHC:1277" u="false" />
+			<render n="1510" m="LFHC:1278" u="false" />
+			<render n="1511" m="LFHC:1279" u="false" />
+			<render n="1512" m="LFHC:1281" u="false" />			
+		</repeat>
+	</fieldset>
+
+</section>
+</htmlform>

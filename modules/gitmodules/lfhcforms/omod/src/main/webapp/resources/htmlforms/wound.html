@@ -1,0 +1,196 @@
+<htmlform formUuid="52c43d9d-c3b6-4fda-8f6b-3590034e7c42" formName="Wound Details" formEncounterType="75a97fa9-4b04-4968-8f5b-041e5d0a3dae" formVersion="0.6"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="18"
+formIcon="icon-medkit"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+<ifMode mode="VIEW">
+	<script type="text/javascript" id="handleViewMode">
+		// JavaScript for VIEW mode
+		jQuery(document).ready(function(){
+			handleViewMode("52c43d9d-c3b6-4fda-8f6b-3590034e7c42");
+		});
+	</script>
+</ifMode>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	jQuery(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+<section id="wound-details" sectionTag="section" headerStyle="title" headerCode="Wound details">
+	<fieldset field-separator=", ">
+		<legend>
+			Type of wound
+		</legend>
+		<h3>
+			Type of wound
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1030"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Factors affecting healing
+		</legend>
+		<h3>
+			Factors affecting healing
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1031"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Width
+		</legend>
+		<h3>
+			Greatest width
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1032" showUnits="true"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Length
+		</legend>
+		<h3>
+			Greatest length
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1033" showUnits="true"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Depth
+		</legend>
+		<h3>
+			Greatest depth
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1034" showUnits="true"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Exudate
+		</legend>
+		<h3>
+			Exudate
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1035" />
+		</p>
+		<h3>Type of exudate</h3>
+		<p>
+			<obs conceptId="LFHC:1037"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Skin temperature
+		</legend>
+		<h3>
+			Surrounding skin temperature
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1040"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Odour
+		</legend>
+		<h3>
+			Odour
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1041"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Color/condition
+		</legend>
+		<h3>
+			Color/condition
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1042"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Dressing change
+		</legend>
+		<h3>
+			Frequency of dressing change
+		</h3>
+		<p>
+			<obs conceptId="CIEL:160716"/>
+		</p>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<legend>
+			Analgesia required
+		</legend>
+		<h3>
+			Analgesia required when changing the dressing
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1044"/>
+		</p>
+	</fieldset>
+</section>
+
+<submit/>
+
+</htmlform>

@@ -1,0 +1,501 @@
+<htmlform formUuid="84e61aee-7d7f-4dfb-b305-7d59b89b762e" formName="Homecare Regular Visit" formEncounterType="4897af83-80b0-4ac3-bdd5-7cdf3467ff63
+" formVersion="0.1"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="25"
+formIcon="icon-medkit"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+<ifMode mode="VIEW" include="false">
+	<uiInclude provider="lfhcforms" javascript="toggleContainers.js"/>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			toggleContainers();
+
+			$(".wong-baker-faces").hover(
+				function() {
+					$(".wong-baker-faces").not(this).addClass("greyed");
+					$(this).removeClass("greyed");
+					$(this).addClass("hovered");
+				}, 
+				function() {
+					$(".wong-baker-faces").not(this).addClass("greyed");
+					$(this).removeClass("hovered");
+				});
+
+			$(".wong-baker-faces").click(function () {
+
+				$(".wong-baker-faces").addClass("greyed");
+
+				if ($(this).hasClass("selected")) {
+					$(".wong-baker-faces").removeClass("selected");
+					$(".wong-baker-faces").removeClass("greyed");
+					$(".wong-baker-faces").removeClass("icon-check");
+
+					$(".wong-baker-faces").addClass("icon-check-empty");
+
+					setValue("wb-score.value", "");	
+
+				} else  {
+					$(".wong-baker-faces").removeClass("selected");
+
+					$(".wong-baker-faces").removeClass("icon-check");
+					$(".wong-baker-faces").addClass("icon-check-empty");
+
+					setValue("wb-score.value", $(this).attr("value"));
+					$(this).addClass("selected");
+					$(this).addClass("icon-check");
+
+					$(this).removeClass("greyed");
+					$(this).removeClass("icon-check-empty");
+				}
+			})
+		});
+	</script>
+
+	<style type="text/css">
+
+		.wong-baker-faces {
+			opacity: 0.8;
+			width:70px;
+		}
+
+		.hovered {
+			opacity: 1;
+		}
+
+		.selected {
+			opacity: 1;
+		}
+		p > img{
+			margin-left:-12px;
+		}
+
+		p.hovered > img{
+		}
+
+		p.selected > img {
+		}
+
+		.greyed {		
+		}
+
+	</style>
+	
+</ifMode>
+
+<ifMode mode="VIEW">
+	<script type="text/javascript" id="handleViewMode">
+		// JavaScript for VIEW mode
+		jQuery(document).ready(function(){
+			handleViewMode("84e61aee-7d7f-4dfb-b305-7d59b89b762e");
+		});
+	</script>
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+
+<section id="physical-assessment" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.physical-assessment">
+
+	<!-- Comfort Level -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.comfort-level" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.comfort-level" />
+		</h3>
+		<ifMode mode="view" include="false">
+			<p style="margin-top:5%">
+				<p  class="wong-baker-faces icon-check-empty" value="0">
+					0
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-0.png" style="width:70px;"/> 
+				</p>
+				<p  class="wong-baker-faces icon-check-empty" value="2">
+					2
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-2.png" style="width:70px;"/> 
+				</p>
+				<p  class="wong-baker-faces icon-check-empty" value="4">
+					4
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-4.png" style="width:70px;"/> 
+				</p>
+				<p  class="wong-baker-faces icon-check-empty" value="6">
+					6
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-6.png" style="width:70px;"/> 
+				</p>
+				<p  class="wong-baker-faces icon-check-empty" value="8">
+					8
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-8.png" style="width:70px;"/> 
+				</p>
+				<p  class="wong-baker-faces icon-check-empty" value="10">
+					10
+					<img src="../../ms/uiframework/resource/lfhcforms/images/wong-baker-10.png" style="width:70px;"/> 
+				</p>
+			</p>
+		</ifMode>
+		<h3 id="wb-title">
+			Wong baker score
+		</h3>
+		<p>
+			
+			<obs id="wb-score" conceptId="CIEL:160287"/>
+		</p>
+	</fieldset>
+
+
+	<!-- General fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.general" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.general" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:1391" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Respiratory fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.respiratory" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.respiratory" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1291" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Cardiovascular fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.cardiovascular" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.cardiovascular" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1446" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Digestive fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.digestive" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.digestive" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1292" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Other fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.other" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.other" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1293" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+</section>
+
+<section id="medication" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.medication">
+	<!-- Medication fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.medication" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.medication" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:162165" cols="40" rows="5" />
+		</p>
+	</fieldset>
+	
+	<!-- HIV drug fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.hiv-until" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.hiv-until" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1448" allowFutureDates="true" />
+		</p>
+	</fieldset>
+
+	<!-- TB drug fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.tb-until" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.tb-until" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1449" allowFutureDates="true" />
+		</p>
+	</fieldset>
+</section>
+
+<section id="nutrition" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.nutrition">
+	<!-- Nutrition fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.nutrition" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.nutrition" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1295" cols="40" rows="5" />
+		</p>
+	</fieldset>
+</section>
+
+<section id="psycho-socio-financial-assessment" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.psycho-socio-financial-assessment">
+	<!-- Psycho socio-financial assessment fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.psycho-socio-financial-assessment" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.psycho-socio-financial-assessment" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:159395" cols="40" rows="5" />
+		</p>
+	</fieldset>
+</section>
+
+<section id="nursing-implemenation" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.nursing-implementation">
+	<!-- Physical Exam Completed fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.physical-exam-completed" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.physical-exam-completed" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1223" />
+		</p>
+	</fieldset>
+
+	<!-- Physical Exam Comments fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.physical-exam-comments" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.physical-exam-comments" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:1391" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Adherence checked fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.adherence-checked" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.adherence-checked" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1224"/>
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.poor-adherence-reason" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:160582" cols="40" rows="5" />
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.adherence-comments" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1294" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Growth measured and plotted fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.growth-measured" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.growth-measured" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1225" />
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.growth-comments" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1296" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Development assessed fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.development-assessed" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.development-assessed" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1226" />
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.development-notes" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1297" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+
+	<!-- Food support provided fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.food-support-provided" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.food-support-provided" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1227" />
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.food-support-notes" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1298" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Hygiene supplies provided fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.hygiene-supplies-provided" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.hygiene-supplies-provided" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1228" />
+		</p>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.hygien-supplies-notes" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1299" cols="40" rows="5" />
+		</p>
+	</fieldset>
+</section>
+
+<section id="next-visit-plan" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.next-visit-plan">
+	<!-- Next visit plan fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.next-visit-plan" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.next-visit-plan" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1229" cols="40" rows="5" />
+		</p>
+	</fieldset>
+
+	<!-- Next visit date fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.next-visit-plan-date" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.next-visit-plan-date" />
+		</h3>
+		<p>
+			<obs conceptId="CIEL:5096" allowFutureDates="true" />
+		</p>
+	</fieldset>
+
+	<!-- Goal continued fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.goal-continued" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.legend.goal-continued" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1233" cols="40" rows="5" />
+		</p>
+	</fieldset>
+</section>
+
+<section id="discharge-education" sectionTag="section" headerStyle="title" headerCode="lfhcforms.homecare-regular-visit.section.discharge-education">
+	<!-- Discharge education fieldset -->
+	<fieldset field-separator=", ">
+		<legend>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.discharge-education" />
+		</legend>
+		<h3>
+			<uimessage code="lfhcforms.homecare-regular-visit.section.discharge-education" />
+		</h3>
+		<p>
+			<obs conceptId="LFHC:1234" cols="40" rows="5" />
+		</p>
+	</fieldset>
+</section>
+
+<submit />
+
+</htmlform>

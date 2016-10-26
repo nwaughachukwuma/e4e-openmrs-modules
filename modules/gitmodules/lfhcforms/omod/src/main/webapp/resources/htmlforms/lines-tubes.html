@@ -1,0 +1,186 @@
+<htmlform formUuid="592bddc7-9889-490b-b3fd-5795648b078a" formName="Lines and Tubes" formEncounterType="934aad8b-250d-450b-9cb3-ca5f01841f61" formVersion="0.6"
+formAddMetadata="yes"
+formUILocation="patientDashboard.visitActions"
+formOrder="16"
+formIcon="icon-medkit"
+formShowIf=""
+formDisplayStyle="Simple"
+>
+
+
+<ifMode mode="VIEW">
+	<script type="text/javascript" >
+		// JavaScript for VIEW mode
+		jQuery(document).ready(function(){
+			handleViewMode("592bddc7-9889-490b-b3fd-5795648b078a");
+		});
+</script>
+</ifMode>
+
+<ifMode mode="enter">
+	<uiInclude provider="lfhcforms" javascript="changeEncounterDate.js"/>
+	<lookup complexExpression="
+	#set($alertMessage = $fn.message('lfhcforms.pastencounter.alert'))
+	#set($successMessage = $fn.message('lfhcforms.pastencounter.success'))
+	&lt;script type=&quot;text/javascript&quot;>
+	var alertMessage = '${alertMessage}';
+	var successMessage = '${successMessage}';
+	jQuery(document).ready(function(){
+	var visitEndDate = new Date('${visit.stopDatetime}');
+	if ( Object.prototype.toString.call(visitEndDate) === '[object Date]' ) {
+	if (!( isNaN( visitEndDate.getTime() ) )) {  
+	changeEncounterDate(visitEndDate);
+}
+}
+});
+&lt;/script>" />
+</ifMode>
+
+<div class="hidden" id="who-where-when">
+	<p id="who">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.provider" />
+		</label>
+		<span>
+			<encounterProvider default="currentUser" required="true" />
+		</span>
+	</p>
+	<p id="where">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.location" />
+		</label>
+		<span>
+			<encounterLocation default="SessionAttribute:emrContext.sessionLocationId" />
+		</span>
+	</p>
+	<p id="when">
+		<label>
+			<uimessage code="coreapps.patientDashBoard.date" />
+		</label>
+		<span>
+			<!-- Mandatory showTime="true" to set encounter date and time -->
+			<encounterDate id="encounterDate" default="now" showTime="true"/>
+		</span>
+	</p>
+</div>
+<style type="text/css">
+	.tg {
+		table-layout: fixed;
+		width: 70%;
+		margin-left: 10px;
+	}
+</style>
+
+
+<section id="lines-tubes" sectionTag="section" headerStyle="title" headerCode="Lines and Tubes">
+	<fieldset field-separator=", ">
+		<legend>IVC #1</legend>
+		<obsgroup groupingConceptId="LFHC:1078">
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1063" />
+			</p>
+			<h3>Size</h3>
+			<p>
+				<obs conceptId="LFHC:1064" showUnits="true" />
+			</p>
+			<h3>Site</h3>
+			<p>
+				<obs conceptId="LFHC:1065" />
+			</p>
+			<h3>Date removed</h3>
+			<p>
+				<obs conceptId="LFHC:1182" />
+			</p>
+		</obsgroup>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<obsgroup groupingConceptId="LFHC:1079">
+			<legend>IVC #2</legend>
+
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1066" />
+			</p>
+			<h3>Size</h3>
+			<p>
+				<obs conceptId="LFHC:1067" showUnits="true" />
+			</p>
+			<h3>Site</h3>
+			<p>
+				<obs conceptId="LFHC:1068" />
+			</p>
+			<h3>Date removed</h3>
+			<p>
+				<obs conceptId="LFHC:1183" />
+			</p>
+		</obsgroup>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<obsgroup groupingConceptId="LFHC:1080">
+			<legend>IVC #3</legend>
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1069" />
+			</p>
+			<h3>Size</h3>
+			<p>
+				<obs conceptId="LFHC:1070" showUnits="true" />
+			</p>
+			<h3>Site</h3>
+			<p>
+				<obs conceptId="LFHC:1071" />
+			</p>
+			<h3>Date removed</h3>
+			<p>
+				<obs conceptId="LFHC:1184" />
+			</p>
+		</obsgroup>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<obsgroup groupingConceptId="LFHC:1081">
+			<legend>NG tube</legend>
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1072" />
+			</p>
+			<h3>Site</h3>
+			<p>
+				<obs conceptId="LFHC:1073" />
+			</p>
+		</obsgroup>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<obsgroup groupingConceptId="LFHC:1082">
+			<legend>Urinary catheter</legend>
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1074"/>
+			</p>
+			<h3>Size</h3>
+			<p>
+				<obs conceptId="LFHC:1075" showUnits="true" />
+			</p>
+		</obsgroup>
+	</fieldset>
+	<fieldset field-separator=", ">
+		<obsgroup groupingConceptId="LFHC:1083">
+			<legend>Other tube</legend>
+			<h3>Date inserted</h3>
+			<p>
+				<obs conceptId="LFHC:1076" />
+			</p>
+			<h3>Size</h3>
+			<p>
+				<obs conceptId="LFHC:1221" showUnits="true" />
+			</p>
+			<h3>Site</h3>
+			<p>
+				<obs conceptId="LFHC:1077" />
+			</p>
+		</obsgroup>
+	</fieldset>
+</section>
+
+<submit/>
+</htmlform>

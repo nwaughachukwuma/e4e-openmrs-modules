@@ -1,0 +1,24 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.iml
+
+bower*
+.classpath
+.idea
+.project
+.settings/*
+api/.classpath
+api/.project
+api/.settings/*
+api/target/*
+omod/.classpath
+omod/.project
+omod/.settings/*
+omod/target/*
+
+# OS X auto-generated files #
+.DS_Store
