@@ -1,0 +1,2 @@
+This is smartaCare openMRS custom code repository. Here we have all the codes, files and images used in customizing smartacare. Before you make any changes please make sure to contact @imeasangansi or @nwaughachukwuma.
+Thank you
