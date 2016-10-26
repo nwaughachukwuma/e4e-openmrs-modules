@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module configVersion="1.2">
+
+    <id>${project.parent.artifactId}</id>
+
+    <name>${project.parent.name}</name>
+
+    <version>${project.parent.version}</version>
+
+    <package>${project.parent.groupId}.${project.parent.artifactId}</package>
+
+    <author>OpenMRS</author>
+
+    <description>
+        ${project.parent.description}
+    </description>
+
+    <updateURL>https://modules.openmrs.org/modules/download/${project.parent.artifactId}/update.rdf</updateURL>
+
+    <require_version>${openmrsCoreVersion}</require_version>
+
+    <require_modules>
+        <require_module version="${reportingModuleVersion}">
+            org.openmrs.module.reporting
+        </require_module>
+        <require_module version="${reportingrestModuleVersion}">
+            org.openmrs.module.reportingrest
+        </require_module>
+        <require_module version="${uiframeworkModuleVersion}">
+            org.openmrs.module.uiframework
+        </require_module>
+        <require_module version="${appuiModuleVersion}">
+            org.openmrs.module.appui
+        </require_module>
+        <require_module version="${appframeworkModuleVersion}">
+            org.openmrs.module.appframework
+        </require_module>
+    </require_modules>
+
+    <activator>${project.parent.groupId}.${project.parent.artifactId}.ReportingUiModuleActivator</activator>
+
+    <mappingFiles>
+    </mappingFiles>
+
+    <messages>
+        <lang>en</lang>
+        <file>messages.properties</file>
+    </messages>
+    <messages>
+        <lang>fr</lang>
+        <file>messages_fr.properties</file>
+    </messages>
+    <messages>
+        <lang>ht</lang>
+        <file>messages_ht.properties</file>
+    </messages>
+
+</module>
+

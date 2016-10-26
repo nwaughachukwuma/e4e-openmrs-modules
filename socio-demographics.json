@@ -1,0 +1,97 @@
+{
+    "id": "referenceapplication.registrationapp.regPatient",
+    "instanceOf": "registrationapp.registerPatient",
+    "label": "Register Patient",
+    "description": "Create a new Patient Record",
+    "extensions": [{
+        "id": "referenceapplication.registrationapp.regPatient.homepageLink",
+        "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+        "type": "link",
+        "label": "referenceapplication.app.registerPatient.label",
+        "url": "registrationapp/registerPatient.page?appId=referenceapplication.registrationapp.regPatient",
+        "icon": "icon-user",
+        "order": 1,
+        "requiredPrivilege": "App: registrationapp.registerPatient"
+    }],
+    "config": {
+        "afterCreatedUrl": "/coreapps/clinicianfacing/patient.page?patientId={{patientId}}",
+        "sections": [{
+            "id": "contactInfo",
+            "label": "registrationapp.patient.contactInfo.label",
+            "questions": [{
+                    "legend": "Person.address",
+                    "fields": [{
+                        "type": "personAddress",
+                        "label": "registrationapp.patient.address.question",
+                        "widget": {
+                            "providerName": "uicommons",
+                            "fragmentId": "field/personAddress"
+                        }
+                    }]
+                },
+                {
+                    "legend": "registrationapp.patient.phone.label",
+                    "id": "phoneNumberLabel",
+                    "fields": [{
+                        "type": "personAttribute",
+                        "label": "registrationapp.patient.phone.question",
+                        "formFieldName": "phoneNumber",
+                        "uuid": "14d4f066-15f5-102d-96e4-000c29c2a5d7",
+                        "widget": {
+                            "providerName": "uicommons",
+                            "fragmentId": "field/text"
+                        },
+                        "cssClasses": ["phone"]
+                    }]
+                },
+                {
+                    "legend": "Occupation",
+                    "id": "personoccupation",
+                    "fields": [{
+                        "type": "personAttribute",
+                        "label": "Occupation",
+                        "formFieldName": "occupation",
+                        "uuid": "795515d8-e058-4a1f-8617-3660f6952fab",
+                        "widget": {
+                            "providerName": "uicommons",
+                            "fragmentId": "field/text"
+                        }
+                    }]
+                }
+            ]
+        }]
+    }
+}
+
+/*
+This is the uicommons version of the person address.
+    {
+                        "legend": "Person.address",
+                        "fields": [{
+                            "type": "personAddress",
+                            "label": "registrationapp.patient.address.question",
+                            "formFieldName": "personAddress",
+                            "widget": {
+                                "providerName": "uicommons",
+                                "fragmentId": "field/personAddress"
+                            }
+                        }]
+                    },
+                    {
+                        "legend": "Ethnicity",
+                        "id": "ethnicity",
+                        "fields": [{
+                            "type": "obs",
+                            "formFieldName": "obs.LFHC:912",
+                            "label": "${project.parent.artifactId}.app.registerPatient.ethnicity",
+                            "widget": {
+                                "providerName": "lfhcforms",
+                                "fragmentId": "field/ethnicity"
+                            }
+                        }]
+                    },
+
+
+
+
+                    */
