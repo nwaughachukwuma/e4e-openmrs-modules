@@ -1,0 +1,5 @@
+The LFHC modules comes with a couple of in-built encounter and visit forms and observations, which may not be necessary to the instance. I took steps to disable this forms, so as to tidy and clean up the instance for the sake it was being set up. The processes required to achieve, and to disable any form from being visible in the visit actions include the following:
+
+1. From the home page, go to CONFIGURE METADATA (click on the icon)
+2. Go to MANAGE ENCOUNTER TYPES.
+3. Click the 'X' button to the right of a form, and retire any form you see to be unrequired.
