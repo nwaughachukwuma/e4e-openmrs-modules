@@ -1,4 +1,4 @@
-Explained in this document is the step by step guide to customize an openMRS instance to include the custom logo and images. 
+Explained in this document is the step by step guide on how to customize an openMRS instance to include the custom logo and images. 
 
 
 [{
