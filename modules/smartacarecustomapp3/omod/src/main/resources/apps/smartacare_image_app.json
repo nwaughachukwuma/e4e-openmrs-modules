@@ -1,0 +1,13 @@
+[{
+  "id": "overrideSettings",
+  "extensions": [
+     {
+        "id": "override.configureStandardHeader",
+        "extensionPointId": "org.openmrs.module.appui.header.config",
+        "type": "config",
+        "extensionParams": {
+            "logo-icon-url": "/smartacarecustomapp3-omod/src/main/webapp/resources/images/openMrsLogo2.png"
+        }
+    }
+  ]
+}]

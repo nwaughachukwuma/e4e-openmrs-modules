@@ -1,0 +1,9 @@
+org\openmrs\module\smartacarecustomapp4\utils\ExtensionFormUtil.class
+org\openmrs\module\smartacarecustomapp4\api\db\hibernate\HibernateSmartaCareCustomAppDAO.class
+org\openmrs\module\smartacarecustomapp4\api\db\SmartaCareCustomAppDAO.class
+org\openmrs\module\smartacarecustomapp4\api\impl\SmartaCareCustomAppServiceImpl.class
+org\openmrs\module\smartacarecustomapp4\api\SmartaCareCustomAppService.class
+org\openmrs\module\smartacarecustomapp4\SmartaCareCustomAppActivator.class
+org\openmrs\module\smartacarecustomapp4\activator\Initializer.class
+org\openmrs\module\smartacarecustomapp4\SmartaCareCustomApp.class
+org\openmrs\module\smartacarecustomapp4\activator\HtmlFormsInitializer.class

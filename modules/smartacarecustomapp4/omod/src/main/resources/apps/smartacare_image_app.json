@@ -1,0 +1,31 @@
+[{
+  "id": "overrideSettings",
+  "extensions": [
+     {
+        "id": "override.configureStandardHeader",
+        "extensionPointId": "org.openmrs.module.appui.header.config",
+        "type": "config",
+        "extensionParams": {
+            "logo-icon-url": "/ms/uiframework/resource/smartacarecustomapp4/images/smartacareLogo.png"
+        }
+    },
+    {
+    	"id": "override.configureStandardHeader",
+        "extensionPointId": "org.openmrs.module.referenceapplication.header.config",
+        "type": "config",
+        "extensionParams": {
+            "logo-icon-url": "/ms/uiframework/resource/smartacarecustomapp4/images/smartacareLogo.png"
+        }
+    },
+    {
+    	{
+    	"id": "override.configureStandardHeader",
+        "extensionPointId": "org.openmrs.module.adminui.header.config",
+        "type": "config",
+        "extensionParams": {
+            "logo-icon-url": "/images/smartacare-Logo-text-small.png"
+        }
+    }
+    }
+  ]
+}]
