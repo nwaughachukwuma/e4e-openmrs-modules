@@ -18,14 +18,12 @@
         }
     },
     {
-    	{
     	"id": "override.configureStandardHeader",
         "extensionPointId": "org.openmrs.module.adminui.header.config",
         "type": "config",
         "extensionParams": {
             "logo-icon-url": "/images/smartacare-Logo-text-small.png"
         }
-    }
     }
   ]
 }]
